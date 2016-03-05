@@ -7,6 +7,8 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
 
   def index(conn, _params) do
     chat_rooms = Repo.all(ChatRoom)
+    # chat_rooms = ChatRoom.fetch_user_chatrooms(user_id)
+
     render(conn, "index.json", chat_rooms: chat_rooms)
   end
 
