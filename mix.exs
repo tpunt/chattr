@@ -19,7 +19,7 @@ defmodule Chattr.Mixfile do
   def application do
     [mod: {Chattr, []},
      applications: [:phoenix, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :corsica]]
   end
 
   # Specifies which paths to compile per environment.
@@ -34,7 +34,8 @@ defmodule Chattr.Mixfile do
      {:postgrex, ">= 0.0.0"},
      {:phoenix_ecto, "~> 2.0"},
      {:gettext, "~> 0.9"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:corsica, "~> 0.4"}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.

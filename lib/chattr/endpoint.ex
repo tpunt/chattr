@@ -17,6 +17,7 @@ defmodule Chattr.Endpoint do
 
   plug Plug.RequestId
   plug Plug.Logger
+  plug Corsica, origins: "*"
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
