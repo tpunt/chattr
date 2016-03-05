@@ -1,0 +1,16 @@
+defmodule Chattr.Repo.Migrations.CreateApi.V1.User.ChatRoom.Host do
+  use Ecto.Migration
+
+  def change do
+    create table(:hosts) do
+      add :uri, :string
+      add :bg_colour, :string
+      add :text_colour, :string
+      add :chatroom_id, references(:chatrooms)
+
+      timestamps
+    end
+    create index(:hosts, [:chatroom_id])
+
+  end
+end

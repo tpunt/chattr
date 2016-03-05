@@ -1,15 +1,16 @@
-defmodule Chattr.Api.V1.User do
+defmodule Chattr.Api.V1.User.ChatRoom.Host do
   use Chattr.Web, :model
 
-  schema "users" do
-    field :username, :string
-    field :password, :string
-    has_many :chatrooms, Chattr.Api.V1.User.ChatRoom
+  schema "hosts" do
+    field :uri, :string
+    field :bg_colour, :string
+    field :text_colour, :string
+    belongs_to :chatroom, Chattr.Api.V1.User.ChatRoom
 
     timestamps
   end
 
-  @required_fields ~w(username password)
+  @required_fields ~w(uri bg_colour text_colour chatroom_id)
   @optional_fields ~w()
 
   @doc """

@@ -6,18 +6,18 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
   plug :scrub_params, "chat_room" when action in [:create, :update]
 
   def index(conn, _params) do
-    chatrooms = Repo.all(ChatRoom)
-    render(conn, "index.json", chatrooms: chatrooms)
+    chat_rooms = Repo.all(ChatRoom)
+    render(conn, "index.json", chat_rooms: chat_rooms)
   end
 
-  def create(conn, %{"chat_room" => chat_room_params}) do
-    changeset = ChatRoom.changeset(%ChatRoom{}, chat_room_params)
+  def create(conn, %{"chat_room" => chat_room_params, "user_id" => user_id}) do
+    changeset = ChatRoom.changeset(%ChatRoom{}, Map.put(chat_room_params, "user_id", user_id))
 
     case Repo.insert(changeset) do
       {:ok, chat_room} ->
         conn
         |> put_status(:created)
-        |> put_resp_header("location", chat_room_path(conn, :show, chat_room))
+        # |> put_resp_header("location", chat_room_path(conn, :show, chat_room))
         |> render("show.json", chat_room: chat_room)
       {:error, changeset} ->
         conn
@@ -26,12 +26,13 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    chat_room = Repo.get!(ChatRoom, id)
+  def show(conn, %{"user_id" => user_id, "id" => chatroom_id}) do
+    chat_room = ChatRoom.fetch_user_chatroom(user_id, chatroom_id)
+
     render(conn, "show.json", chat_room: chat_room)
   end
 
-  def update(conn, %{"id" => id, "chat_room" => chat_room_params}) do
+  def update(conn, %{"user_id" => user_id, "id" => id, "chat_room" => chat_room_params}) do
     chat_room = Repo.get!(ChatRoom, id)
     changeset = ChatRoom.changeset(chat_room, chat_room_params)
 
