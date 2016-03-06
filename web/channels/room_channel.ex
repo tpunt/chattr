@@ -12,35 +12,21 @@ defmodule Chattr.RoomChannel do
   `:ignore` to deny subscription/broadcast on this channel
   for the requested topic
   """
-  def join("rooms:lobby", message, socket) do
-    Process.flag(:trap_exit, true)
-    :timer.send_interval(5000, :ping)
-    send(self, {:after_join, message})
-
+  def join("rooms:lobby", _message, socket) do
     {:ok, socket}
   end
-
-  def join("rooms:" <> _private_subtopic, _message, _socket) do
+  def join("rooms:" <> _private_room_id, _params, _socket) do
     {:error, %{reason: "unauthorized"}}
   end
 
-  def handle_info({:after_join, msg}, socket) do
-    broadcast! socket, "user:entered", %{user: msg["user"]}
-    push socket, "join", %{status: "connected"}
-    {:noreply, socket}
-  end
-  def handle_info(:ping, socket) do
-    push socket, "new:msg", %{user: "SYSTEM", body: "ping"}
+  def handle_in("new_msg", %{"body" => body}, socket) do
+    IO.inspect body
+    broadcast! socket, "new_msg", %{body: body}
     {:noreply, socket}
   end
 
-  def terminate(reason, _socket) do
-    Logger.debug"> leave #{inspect reason}"
-    :ok
-  end
-
-  def handle_in("new:msg", msg, socket) do
-    broadcast! socket, "new:msg", %{user: msg["user"], body: msg["body"]}
-    {:reply, {:ok, %{msg: msg["body"]}}, assign(socket, :user, msg["user"])}
+  def handle_out("new_msg", payload, socket) do
+    push socket, "new_msg", payload
+    {:noreply, socket}
   end
 end
