@@ -26,14 +26,18 @@ defmodule Chattr.Api.V1.User.ChatRoom do
   end
 
   def fetch_user_chatrooms(user_id) do
-    Repo.all from u in User,
+    user_query = from u in User,
+      where: u.id == ^user_id
+
+    Repo.one! user_query
+
+    Repo.all from u in user_query,
       join: cr in ChatRoom, on: u.id == cr.user_id,
-      where: u.id == ^user_id,
       select: cr
   end
 
   def fetch_user_chatroom(user_id, chatroom_id) do
-    Repo.one from u in User,
+    Repo.one! from u in User,
       join: cr in ChatRoom, on: u.id == cr.user_id,
       where: u.id == ^user_id and cr.id == ^chatroom_id,
       select: cr

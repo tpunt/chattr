@@ -5,8 +5,8 @@ defmodule Chattr.Api.V1.User.ChatRoom.HostController do
 
   plug :scrub_params, "host" when action in [:create, :update]
 
-  def index(conn, _params) do
-    hosts = Repo.all(Host)
+  def index(conn, %{"user_id" => user_id, "chatroom_id" => chatroom_id}) do
+    hosts = Host.fetch_chatroom_hosts(user_id, chatroom_id)
     render(conn, "index.json", hosts: hosts)
   end
 
@@ -26,8 +26,8 @@ defmodule Chattr.Api.V1.User.ChatRoom.HostController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    host = Repo.get!(Host, id)
+  def show(conn, %{"user_id" => user_id, "chatroom_id" => chatroom_id, "id" => host_id}) do
+    host = Host.fetch_chatroom_host(user_id, chatroom_id, host_id)
     render(conn, "show.json", host: host)
   end
 

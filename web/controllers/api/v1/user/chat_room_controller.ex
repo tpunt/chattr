@@ -5,10 +5,8 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
 
   plug :scrub_params, "chat_room" when action in [:create, :update]
 
-  def index(conn, _params) do
-    chat_rooms = Repo.all(ChatRoom)
-    # chat_rooms = ChatRoom.fetch_user_chatrooms(user_id)
-
+  def index(conn, %{"user_id" => user_id}) do
+    chat_rooms = ChatRoom.fetch_user_chatrooms(user_id)
     render(conn, "index.json", chat_rooms: chat_rooms)
   end
 
@@ -30,7 +28,6 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
 
   def show(conn, %{"user_id" => user_id, "id" => chatroom_id}) do
     chat_room = ChatRoom.fetch_user_chatroom(user_id, chatroom_id)
-
     render(conn, "show.json", chat_room: chat_room)
   end
 
