@@ -16,8 +16,8 @@ defmodule Chattr.Api.V1.User.ChatRoom.Message do
     timestamps
   end
 
-  @required_fields ~w(message longitude latitude location)
-  @optional_fields ~w()
+  @required_fields ~w(message chatroom_id user_id)
+  @optional_fields ~w(longitude latitude location)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
