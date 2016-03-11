@@ -4,7 +4,7 @@ defmodule Chattr.UserSocket do
   channel "rooms:*", Chattr.RoomChannel
 
   transport :websocket, Phoenix.Transports.WebSocket
-  transport :longpoll, Phoenix.Transports.LongPoll
+  # transport :longpoll, Phoenix.Transports.LongPoll
 
   def connect(_params, socket) do
     {:ok, socket}
