@@ -14,7 +14,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.Host do
     timestamps
   end
 
-  @required_fields ~w(uri bg_colour text_colour chat_room_id)
+  @required_fields ~w(uri bg_colour text_colour)
   @optional_fields ~w()
 
   @doc """

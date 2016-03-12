@@ -15,6 +15,6 @@ defmodule Chattr.Api.V1.User.ChatRoomView do
     %{id: chat_room.id,
       name: chat_room.name,
       user_id: chat_room.user_id}
-    |> Map.put(:hosts, HostView.render("index.json", hosts: chat_room.hosts).hosts)
+    |> Map.merge(HostView.render("index.json", hosts: chat_room.hosts))
   end
 end
