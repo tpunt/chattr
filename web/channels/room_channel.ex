@@ -26,7 +26,6 @@ defmodule Chattr.RoomChannel do
   end
 
   def handle_in("new:message", body, socket) do
-    IO.inspect body
     changeset = Message.changeset(%Message{}, body)
 
     case Repo.insert(changeset) do
