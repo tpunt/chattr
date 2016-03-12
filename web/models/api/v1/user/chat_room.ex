@@ -35,8 +35,15 @@ defmodule Chattr.Api.V1.User.ChatRoom do
 
     Repo.one! user_query
 
-    Repo.all from u in user_query,
-      join: cr in ChatRoom, on: u.id == cr.user_id,
+    # Repo.all from u in user_query,
+    #   join: cr in ChatRoom, on: u.id == cr.user_id,
+    #   select: cr
+
+    Repo.all from cr in ChatRoom,
+      join: u in User, on: u.id == cr.user_id,
+      left_join: h in assoc(cr, :hosts),
+      where: u.id == ^user_id,
+      preload: [hosts: h],
       select: cr
   end
 
