@@ -3,10 +3,14 @@ defmodule Chattr.Api.V1.User.ChatRoom do
 
   alias Chattr.Api.V1.User
   alias Chattr.Api.V1.User.ChatRoom
+  alias Chattr.Api.V1.User.ChatRoom.Host
+  alias Chattr.Api.V1.User.ChatRoom.Message
 
-  schema "chatrooms" do
+  schema "chat_rooms" do
     field :name, :string
     belongs_to :user, User
+    has_many :hosts, Host
+    has_many :messages, Message
 
     timestamps
   end
@@ -25,7 +29,7 @@ defmodule Chattr.Api.V1.User.ChatRoom do
     |> cast(params, @required_fields, @optional_fields)
   end
 
-  def fetch_user_chatrooms(user_id) do
+  def fetch_user_chat_rooms(user_id) do
     user_query = from u in User,
       where: u.id == ^user_id
 
@@ -36,10 +40,19 @@ defmodule Chattr.Api.V1.User.ChatRoom do
       select: cr
   end
 
-  def fetch_user_chatroom(user_id, chatroom_id) do
-    Repo.one! from u in User,
-      join: cr in ChatRoom, on: u.id == cr.user_id,
-      where: u.id == ^user_id and cr.id == ^chatroom_id,
+  def fetch_user_chat_room(user_id, chat_room_id) do
+    # Repo.one! from u in User,
+    #   join: cr in ChatRoom, on: u.id == cr.user_id,
+    #   join: h in assoc(cr, :hosts),
+    #   where: u.id == ^user_id and cr.id == ^chat_room_id,
+    #   preload: [hosts: h],
+    #   select: cr
+
+    Repo.one! from cr in ChatRoom,
+      join: u in User, on: u.id == cr.user_id,
+      left_join: h in assoc(cr, :hosts),
+      where: u.id == ^user_id and cr.id == ^chat_room_id,
+      preload: [hosts: h],
       select: cr
   end
 end

@@ -19,7 +19,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.MessageControllerTest do
     conn = get conn, message_path(conn, :show, message)
     assert json_response(conn, 200)["data"] == %{"id" => message.id,
       "message" => message.message,
-      "chatroom_id" => message.chatroom_id,
+      "chat_room_id" => message.chat_room_id,
       "user_id" => message.user_id,
       "longitude" => message.longitude,
       "latitude" => message.latitude,

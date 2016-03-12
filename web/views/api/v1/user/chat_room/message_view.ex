@@ -12,7 +12,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.MessageView do
   def render("message.json", %{message: message}) do
     %{id: message.id,
       message: message.message,
-      chatroom_id: message.chatroom_id,
+      chat_room_id: message.chat_room_id,
       user_id: message.user_id,
       longitude: message.longitude,
       latitude: message.latitude,

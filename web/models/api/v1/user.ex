@@ -4,7 +4,7 @@ defmodule Chattr.Api.V1.User do
   schema "users" do
     field :username, :string
     field :password, :string
-    has_many :chatrooms, Chattr.Api.V1.User.ChatRoom
+    has_many :chat_rooms, Chattr.Api.V1.User.ChatRoom
 
     timestamps
   end

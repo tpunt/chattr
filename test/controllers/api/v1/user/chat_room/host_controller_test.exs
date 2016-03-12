@@ -21,7 +21,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.HostControllerTest do
       "uri" => host.uri,
       "bg_colour" => host.bg_colour,
       "text_colour" => host.text_colour,
-      "chatroom_id" => host.chatroom_id}
+      "chat_room_id" => host.chat_room_id}
   end
 
   test "does not show resource and instead throw error when id is nonexistent", %{conn: conn} do

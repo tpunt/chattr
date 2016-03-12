@@ -6,11 +6,11 @@ defmodule Chattr.Repo.Migrations.CreateApi.V1.User.ChatRoom.Host do
       add :uri, :string
       add :bg_colour, :string
       add :text_colour, :string
-      add :chatroom_id, references(:chatrooms)
+      add :chat_room_id, references(:chat_rooms)
 
       timestamps
     end
-    create index(:hosts, [:chatroom_id])
+    create index(:hosts, [:chat_room_id])
 
   end
 end

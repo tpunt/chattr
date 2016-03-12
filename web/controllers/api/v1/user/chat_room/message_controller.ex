@@ -5,8 +5,8 @@ defmodule Chattr.Api.V1.User.ChatRoom.MessageController do
 
   plug :scrub_params, "message" when action in [:create, :update]
 
-  def index(conn, %{"user_id" => user_id, "chatroom_id" => chatroom_id}) do
-    messages = Message.fetch_chatroom_messages(user_id, chatroom_id)
+  def index(conn, %{"user_id" => user_id, "chat_room_id" => chat_room_id}) do
+    messages = Message.fetch_chat_room_messages(user_id, chat_room_id)
     render(conn, "index.json", messages: messages)
   end
 
@@ -26,8 +26,8 @@ defmodule Chattr.Api.V1.User.ChatRoom.MessageController do
     end
   end
 
-  def show(conn, %{"user_id" => user_id, "chatroom_id" => chatroom_id, "id" => message_id}) do
-    message = Message.fetch_chatroom_message(user_id, chatroom_id, message_id)
+  def show(conn, %{"user_id" => user_id, "chat_room_id" => chat_room_id, "id" => message_id}) do
+    message = Message.fetch_chat_room_message(user_id, chat_room_id, message_id)
     render(conn, "show.json", message: message)
   end
 

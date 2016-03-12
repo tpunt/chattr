@@ -5,13 +5,13 @@ defmodule Chattr.Api.V1.User.ChatRoom.HostController do
 
   plug :scrub_params, "host" when action in [:create, :update]
 
-  def index(conn, %{"user_id" => user_id, "chatroom_id" => chatroom_id}) do
-    hosts = Host.fetch_chatroom_hosts(user_id, chatroom_id)
+  def index(conn, %{"user_id" => user_id, "chat_room_id" => chat_room_id}) do
+    hosts = Host.fetch_chat_room_hosts(user_id, chat_room_id)
     render(conn, "index.json", hosts: hosts)
   end
 
-  def create(conn, %{"host" => host_params, "chatroom_id" => chatroom_id, "user_id" => user_id}) do
-    changeset = Host.changeset(%Host{}, Map.put(host_params, "chatroom_id", chatroom_id))
+  def create(conn, %{"host" => host_params, "chat_room_id" => chat_room_id, "user_id" => user_id}) do
+    changeset = Host.changeset(%Host{}, Map.put(host_params, "chat_room_id", chat_room_id))
 
     case Repo.insert(changeset) do
       {:ok, host} ->
@@ -26,8 +26,8 @@ defmodule Chattr.Api.V1.User.ChatRoom.HostController do
     end
   end
 
-  def show(conn, %{"user_id" => user_id, "chatroom_id" => chatroom_id, "id" => host_id}) do
-    host = Host.fetch_chatroom_host(user_id, chatroom_id, host_id)
+  def show(conn, %{"user_id" => user_id, "chat_room_id" => chat_room_id, "id" => host_id}) do
+    host = Host.fetch_chat_room_host(user_id, chat_room_id, host_id)
     render(conn, "show.json", host: host)
   end
 

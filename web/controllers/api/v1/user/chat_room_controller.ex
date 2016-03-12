@@ -2,11 +2,12 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
   use Chattr.Web, :controller
 
   alias Chattr.Api.V1.User.ChatRoom
+  alias Chattr.Api.V1.User.ChatRoom.Host
 
   plug :scrub_params, "chat_room" when action in [:create, :update]
 
   def index(conn, %{"user_id" => user_id}) do
-    chat_rooms = ChatRoom.fetch_user_chatrooms(user_id)
+    chat_rooms = ChatRoom.fetch_user_chat_rooms(user_id)
     render(conn, "index.json", chat_rooms: chat_rooms)
   end
 
@@ -26,8 +27,14 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
     end
   end
 
-  def show(conn, %{"user_id" => user_id, "id" => chatroom_id}) do
-    chat_room = ChatRoom.fetch_user_chatroom(user_id, chatroom_id)
+  def show(conn, %{"user_id" => user_id, "id" => chat_room_id}) do
+    chat_room = ChatRoom.fetch_user_chat_room(user_id, chat_room_id)
+    # hosts = Host.fetch_chat_room_hosts(user_id, chat_room_id)
+    # IO.inspect chat_room
+    # chat_room = %{chat_room | hosts: render(Chattr.Api.V1.User.ChatRoom.HostView, "index.json", hosts: chat_room.hosts)}
+    # IO.inspect chat_room
+    # chat_room = Map.put(chat_room, "hosts", hosts_json)
+
     render(conn, "show.json", chat_room: chat_room)
   end
 
