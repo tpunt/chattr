@@ -69,6 +69,7 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
 
     case Repo.update(changeset) do
       {:ok, chat_room} ->
+        chat_room = ChatRoom.fetch_user_chat_room(user_id, chat_room.id)
         render(conn, "show.json", chat_room: chat_room)
       {:error, changeset} ->
         conn
