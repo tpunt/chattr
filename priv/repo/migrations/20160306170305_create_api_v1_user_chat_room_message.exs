@@ -1,4 +1,4 @@
-defmodule Chattr.Repo.Migrations.CreateApi.V1.User.ChatRoom.Message do
+defmodule Chattr.Repo.Migrations.CreateApi.V1.Message do
   use Ecto.Migration
 
   def change do

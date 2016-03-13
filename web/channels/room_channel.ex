@@ -1,7 +1,7 @@
 defmodule Chattr.RoomChannel do
   use Chattr.Web, :channel
 
-  alias Chattr.Api.V1.User.ChatRoom.Message
+  alias Chattr.Api.V1.Message
 
   def join("rooms:lobby", message, socket) do
     Process.flag(:trap_exit, true)

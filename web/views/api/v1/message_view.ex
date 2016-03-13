@@ -1,12 +1,14 @@
-defmodule Chattr.Api.V1.User.ChatRoom.MessageView do
+defmodule Chattr.Api.V1.MessageView do
   use Chattr.Web, :view
 
+  alias Chattr.Api.V1.MessageView
+
   def render("index.json", %{messages: messages}) do
-    %{messages: render_many(messages, Chattr.Api.V1.User.ChatRoom.MessageView, "message.json")}
+    %{messages: render_many(messages, MessageView, "message.json")}
   end
 
   def render("show.json", %{message: message}) do
-    %{message: render_one(message, Chattr.Api.V1.User.ChatRoom.MessageView, "message.json")}
+    %{message: render_one(message, MessageView, "message.json")}
   end
 
   def render("message.json", %{message: message}) do

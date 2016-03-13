@@ -1,10 +1,10 @@
 defmodule Chattr.Api.V1.User.ChatRoom do
   use Chattr.Web, :model
 
+  alias Chattr.Api.V1.Message
   alias Chattr.Api.V1.User
   alias Chattr.Api.V1.User.ChatRoom
   alias Chattr.Api.V1.User.ChatRoom.Host
-  alias Chattr.Api.V1.User.ChatRoom.Message
 
   schema "chat_rooms" do
     field :name, :string
