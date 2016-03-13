@@ -15,7 +15,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.Host do
   end
 
   @required_fields ~w(uri bg_colour text_colour)
-  @optional_fields ~w()
+  @optional_fields ~w(chat_room_id)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
