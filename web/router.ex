@@ -2,7 +2,6 @@ defmodule Chattr.Router do
   use Chattr.Web, :router
 
   pipeline :api do
-    plug Corsica
     plug :accepts, ["json"]
   end
 
