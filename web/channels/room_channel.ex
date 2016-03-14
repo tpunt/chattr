@@ -25,20 +25,34 @@ defmodule Chattr.RoomChannel do
     :ok
   end
 
-  def handle_in("new:message", body, socket) do
+  def handle_in("message:new", body, socket) do
     changeset = Message.changeset(%Message{}, body)
 
     case Repo.insert(changeset) do
       {:ok, message} ->
-        broadcast! socket, "new:message", %{user_id: body["user_id"], body: body["message"]}
+        broadcast! socket, "message:new", %{user_id: body["user_id"], body: body["message"]}
         {:reply, {:ok, %{message: body["message"], user_id: body["user_id"]}}, assign(socket, :user_id, body["user_id"])}
+      {:error, changeset} ->
+        {:reply, {:error, %{error_message: "Could not create message", message: body["message"], user_id: body["user_id"]}}, assign(socket, :user_id, body["user_id"])}
+    end
+  end
+
+  def handle_in("message:edit", body, socket) do
+    message = Repo.get!(Message, body["id"])
+    changeset = Message.changeset(message, body)
+
+    case IO.inspect Repo.update(changeset) do
+      {:ok, message} ->
+        data = %{data: %{message: message["message"], message_id: message["id"], inserted_at: message["inserted_at"], updated_at: message["updated_at"]}}
+        broadcast! socket, "message:edit", data
+        {:reply, {:ok, data}, assign(socket, :user_id, body["user_id"])}
       {:error, changeset} ->
         {:reply, {:error, %{error_message: "Could not post message", message: body["message"], user_id: body["user_id"]}}, assign(socket, :user_id, body["user_id"])}
     end
   end
 
   # def handle_info(:ping, socket) do
-  #   push socket, "new:message", %{user: "SYSTEM", body: "ping"}
+  #   push socket, "message:new", %{user: "SYSTEM", body: "ping"}
   #   {:noreply, socket}
   # end
 
