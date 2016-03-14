@@ -41,13 +41,25 @@ defmodule Chattr.RoomChannel do
     message = Repo.get!(Message, body["id"])
     changeset = Message.changeset(message, body)
 
-    case IO.inspect Repo.update(changeset) do
+    case Repo.update(changeset) do
       {:ok, message} ->
-        data = %{data: %{message: message["message"], message_id: message["id"], inserted_at: message["inserted_at"], updated_at: message["updated_at"]}}
+        data = %{message: message["message"], message_id: message["id"], inserted_at: message["inserted_at"], updated_at: message["updated_at"]}
         broadcast! socket, "message:edit", data
-        {:reply, {:ok, data}, assign(socket, :user_id, body["user_id"])}
+        {:reply, {:ok, data}, assign(socket, :user_id, message["user_id"])}
       {:error, changeset} ->
-        {:reply, {:error, %{error_message: "Could not post message", message: body["message"], user_id: body["user_id"]}}, assign(socket, :user_id, body["user_id"])}
+        {:reply, {:error, %{error_message: "Could not edit message"}}, assign(socket, :user_id, message["user_id"])}
+    end
+  end
+
+  def handle_in("message:delete", body, socket) do
+    message = Repo.get!(Message, body["id"])
+
+    case Repo.delete(message) do
+      {:ok, message} ->
+        {:reply, {:ok, ""}, assign(socket, :user_id, message["user_id"])}
+        broadcast! socket, "message:edit", ""
+      {:error, changeset} ->
+        {:reply, {:error, %{error_message: "Could not delete message"}}, assign(socket, :user_id, message["user_id"])}
     end
   end
 
