@@ -56,8 +56,9 @@ defmodule Chattr.RoomChannel do
 
     case Repo.delete(message) do
       {:ok, message} ->
-        broadcast! socket, "message:delete", %{}
-        {:reply, {:ok, %{}}, assign(socket, :user_id, message.user_id)}
+        data = %{message_id: message.id}
+        broadcast! socket, "message:delete", data
+        {:reply, {:ok, data}, assign(socket, :user_id, message.user_id)}
       {:error, changeset} ->
         {:reply, {:error, %{error_message: "Could not delete message"}}, assign(socket, :user_id, message.user_id)}
     end
