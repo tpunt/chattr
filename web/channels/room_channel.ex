@@ -30,8 +30,9 @@ defmodule Chattr.RoomChannel do
 
     case Repo.insert(changeset) do
       {:ok, message} ->
-        broadcast! socket, "message:new", %{user_id: body["user_id"], body: body["message"]}
-        {:reply, {:ok, %{message: body["message"], user_id: body["user_id"]}}, assign(socket, :user_id, body["user_id"])}
+        data = %{user_id: message.user_id, message: message.message, message_id: message.id, inserted_at: message.inserted_at, updated_at: message.updated_at}
+        broadcast! socket, "message:new", data
+        {:reply, {:ok, data}, assign(socket, :user_id, body["user_id"])}
       {:error, changeset} ->
         {:reply, {:error, %{error_message: "Could not create message", message: body["message"], user_id: body["user_id"]}}, assign(socket, :user_id, body["user_id"])}
     end
