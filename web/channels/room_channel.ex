@@ -2,20 +2,26 @@ defmodule Chattr.RoomChannel do
   use Chattr.Web, :channel
 
   alias Chattr.Api.V1.Message
+  alias Chattr.Api.V1.User
 
   def join("rooms:lobby", message, socket) do
     Process.flag(:trap_exit, true)
-    # :timer.send_interval(5000, :ping)
+
     send(self, {:after_join, message})
-    {:ok, socket}
+    {:ok, assign(socket, :room_id, 0)}
   end
 
-  def join("rooms:" <> room_id, _params, socket) do
+  def join("rooms:" <> room_id, message, socket) do
+    send(self, {:after_join, message})
     {:ok, assign(socket, :room_id, room_id)}
   end
 
   def handle_info({:after_join, body}, socket) do
-    broadcast! socket, "user:entered", %{user_id: body["user_id"]}
+    user = Repo.get!(User, body["user_id"]) # should be oauth token?
+
+    data = %{user: %{id: user.id, username: user.username}}
+
+    broadcast! socket, "user:joined", data
     push socket, "phx_join", %{status: "connected"}
     {:noreply, socket}
   end
