@@ -11,7 +11,9 @@ defmodule Chattr.Api.V1.UserView do
 
   def render("user.json", %{user: user}) do
     %{id: user.id,
-      username: user.username,
-      password: user.password}
+      name: user.name,
+      email: user.email,
+      authenticator: user.authenticator,
+      user_id: user.user_id}
   end
 end

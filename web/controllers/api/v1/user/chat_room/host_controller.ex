@@ -10,7 +10,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.HostController do
     render(conn, "index.json", hosts: hosts)
   end
 
-  def create(conn, %{"host" => host_params, "chat_room_id" => chat_room_id, "user_id" => user_id}) do
+  def create(conn, %{"host" => host_params, "chat_room_id" => chat_room_id, "user_id" => _user_id}) do
     changeset = Host.changeset(%Host{}, Map.put(host_params, "chat_room_id", chat_room_id))
 
     case Repo.insert(changeset) do

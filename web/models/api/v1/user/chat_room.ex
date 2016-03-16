@@ -62,4 +62,17 @@ defmodule Chattr.Api.V1.User.ChatRoom do
       preload: [hosts: h],
       select: cr
   end
+
+  def fetch_user_chat_room(chat_room_id) do
+    # Repo.one! from u in User,
+    #   join: cr in ChatRoom, on: u.id == cr.user_id,
+    #   join: h in assoc(cr, :hosts),
+    #   where: u.id == ^user_id and cr.id == ^chat_room_id,
+    #   preload: [hosts: h],
+    #   select: cr
+
+    Repo.one! from cr in ChatRoom,
+      where: cr.id == ^chat_room_id,
+      select: cr
+  end
 end

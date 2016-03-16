@@ -3,23 +3,24 @@ defmodule Chattr.Api.V1.UserController do
 
   alias Chattr.Api.V1.User
 
-  plug :scrub_params, "user" when action in [:create, :update]
+  # plug :scrub_params, "user" when action in [:create, :update]
 
   def index(conn, _params) do
     users = Repo.all(User)
     render(conn, "index.json", users: users)
   end
 
-  def create(conn, %{"user" => user_params}) do
-    changeset = User.changeset(%User{}, user_params)
+  def create(conn, params) do
+    changeset = User.changeset(%User{}, params)
 
-    case Repo.insert(changeset) do
+    case ins = Repo.insert(changeset) do
       {:ok, user} ->
         conn
         |> put_status(:created)
         |> put_resp_header("location", user_path(conn, :show, user))
         |> render("show.json", user: user)
       {:error, changeset} ->
+        IO.inspect ins
         conn
         |> put_status(:unprocessable_entity)
         |> render(Chattr.ChangesetView, "error.json", changeset: changeset)

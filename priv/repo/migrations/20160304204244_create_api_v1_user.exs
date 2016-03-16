@@ -3,11 +3,15 @@ defmodule Chattr.Repo.Migrations.CreateApi.V1.User do
 
   def change do
     create table(:users) do
-      add :username, :string
-      add :password, :string
+      add :name, :string
+      add :email, :string
+      add :password_hash, :string
+      add :authenticator, :string
+      add :user_id, :string
 
       timestamps
     end
 
+    create unique_index(:users, [:email])
   end
 end
