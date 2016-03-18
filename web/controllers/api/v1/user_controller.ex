@@ -49,8 +49,13 @@ defmodule Chattr.Api.V1.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
-    render(conn, "show.json", user: user)
+    case User.get_user_by_user_id(id) do
+      nil ->
+        user = Repo.get!(User, id)
+        render(conn, "show.json", user: user)
+      user ->
+        render(conn, "show.json", user: user)
+    end
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
