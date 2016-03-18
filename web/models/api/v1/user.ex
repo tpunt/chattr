@@ -2,6 +2,7 @@ defmodule Chattr.Api.V1.User do
   use Chattr.Web, :model
 
   alias Chattr.Api.V1.GoogleAuth
+  alias Chattr.Api.V1.User
 
   schema "users" do
     field :name, :string
@@ -48,6 +49,12 @@ defmodule Chattr.Api.V1.User do
     |> password_confirmation
     |> unique_constraint(:email)
     |> hash_password
+  end
+
+  def get_user_by_user_id(user_id) do
+    Repo.one from u in User,
+      where: u.user_id == ^user_id,
+      select: u
   end
 
   defp password_confirmation(changeset) do

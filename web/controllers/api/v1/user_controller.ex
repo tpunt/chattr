@@ -10,17 +10,38 @@ defmodule Chattr.Api.V1.UserController do
     render(conn, "index.json", users: users)
   end
 
+  def create(conn, %{"authenticator" => "google"} = params) do
+    changeset = User.changeset(%User{}, params)
+
+    case User.get_user_by_user_id(changeset.changes.user_id) do
+      nil ->
+        case Repo.insert(changeset) do
+          {:ok, user} ->
+            conn
+            |> put_status(:created)
+            |> put_resp_header("location", user_path(conn, :show, user))
+            |> render("show.json", user: user)
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render(Chattr.ChangesetView, "error.json", changeset: changeset)
+        end
+      user ->
+        conn
+        |> render("show.json", user: user)
+    end
+  end
+
   def create(conn, params) do
     changeset = User.changeset(%User{}, params)
 
-    case ins = Repo.insert(changeset) do
+    case Repo.insert(changeset) do
       {:ok, user} ->
         conn
         |> put_status(:created)
         |> put_resp_header("location", user_path(conn, :show, user))
         |> render("show.json", user: user)
       {:error, changeset} ->
-        IO.inspect ins
         conn
         |> put_status(:unprocessable_entity)
         |> render(Chattr.ChangesetView, "error.json", changeset: changeset)
