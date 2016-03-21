@@ -31,6 +31,12 @@ defmodule Chattr.RoomChannel do
     :ok
   end
 
+  def handle_in("user:typing", body, socket) do
+    user = Repo.get!(User, body["user_id"]); # @TODO verify ID
+    data = %{user: %{id: user.id, name: user.name}}
+    broadcast! socket, "user:typing", data
+  end
+
   def handle_in("message:new", body, socket) do
     changeset = Message.changeset(%Message{}, body)
 
@@ -39,7 +45,7 @@ defmodule Chattr.RoomChannel do
         data = %{user_id: message.user_id, message: message.message, message_id: message.id, inserted_at: message.inserted_at, updated_at: message.updated_at}
         broadcast! socket, "message:new", data
         {:reply, {:ok, data}, assign(socket, :user_id, body["user_id"])}
-      {:error, changeset} ->
+      {:error, _} ->
         {:reply, {:error, %{error_message: "Could not create message", message: body["message"], user_id: body["user_id"]}}, assign(socket, :user_id, body["user_id"])}
     end
   end
@@ -53,7 +59,7 @@ defmodule Chattr.RoomChannel do
         data = %{message: message.message, message_id: message.id, inserted_at: message.inserted_at, updated_at: message.updated_at}
         broadcast! socket, "message:edit", data
         {:reply, {:ok, data}, assign(socket, :user_id, message.user_id)}
-      {:error, changeset} ->
+      {:error, _} ->
         {:reply, {:error, %{error_message: "Could not edit message"}}, assign(socket, :user_id, message.user_id)}
     end
   end
@@ -66,7 +72,7 @@ defmodule Chattr.RoomChannel do
         data = %{message_id: message.id}
         broadcast! socket, "message:delete", data
         {:reply, {:ok, data}, assign(socket, :user_id, message.user_id)}
-      {:error, changeset} ->
+      {:error, _} ->
         {:reply, {:error, %{error_message: "Could not delete message"}}, assign(socket, :user_id, message.user_id)}
     end
   end
