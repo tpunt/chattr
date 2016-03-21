@@ -35,6 +35,7 @@ defmodule Chattr.RoomChannel do
     user = Repo.get!(User, body["user_id"]); # @TODO verify ID
     data = %{user: %{id: user.id, name: user.name}}
     broadcast! socket, "user:typing", data
+    {:reply, {:ok, data}, assign(socket, :user_id, body["user_id"])}
   end
 
   def handle_in("message:new", body, socket) do
