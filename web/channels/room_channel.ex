@@ -31,10 +31,17 @@ defmodule Chattr.RoomChannel do
     :ok
   end
 
-  def handle_in("user:typing", body, socket) do
+  def handle_in("user:typing:start", body, socket) do
     user = Repo.get!(User, body["user_id"]); # @TODO verify ID
     data = %{user: %{id: user.id, name: user.name}}
-    broadcast! socket, "user:typing", data
+    broadcast! socket, "user:typing:start", data
+    {:reply, {:ok, data}, assign(socket, :user_id, body["user_id"])}
+  end
+
+  def handle_in("user:typing:stop", body, socket) do
+    user = Repo.get!(User, body["user_id"]); # @TODO verify ID
+    data = %{user: %{id: user.id, name: user.name}}
+    broadcast! socket, "user:typing:stop", data
     {:reply, {:ok, data}, assign(socket, :user_id, body["user_id"])}
   end
 
