@@ -7,7 +7,7 @@ defmodule Chattr.Repo.Migrations.CreateApi.V1.Message do
       add :longitude, :decimal
       add :latitude, :decimal
       add :location, :string
-      add :chat_room_id, references(:chat_rooms, on_delete: :nothing)
+      add :chat_room_id, references(:chat_rooms, on_delete: :delete_all)
       add :user_id, references(:users, on_delete: :nothing)
 
       timestamps
