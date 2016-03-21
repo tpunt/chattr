@@ -31,7 +31,7 @@ defmodule Chattr.Api.V1.User.ChatRoom do
 
   def fetch_user_chat_rooms(user_id) do
     user_query = from u in User,
-      where: u.id == ^user_id
+      where: u.user_id == ^user_id or u.id == ^user_id
 
     Repo.one! user_query
 
@@ -42,7 +42,7 @@ defmodule Chattr.Api.V1.User.ChatRoom do
     Repo.all from cr in ChatRoom,
       join: u in User, on: u.id == cr.user_id,
       left_join: h in assoc(cr, :hosts),
-      where: u.id == ^user_id,
+      where: u.id == ^user_id or u.user_id == ^user_id,
       preload: [hosts: h],
       select: cr
   end
@@ -58,7 +58,7 @@ defmodule Chattr.Api.V1.User.ChatRoom do
     Repo.one! from cr in ChatRoom,
       join: u in User, on: u.id == cr.user_id,
       left_join: h in assoc(cr, :hosts),
-      where: u.id == ^user_id and cr.id == ^chat_room_id,
+      where: (u.id == ^user_id or u.user_id == ^user_id) and cr.id == ^chat_room_id,
       preload: [hosts: h],
       select: cr
   end

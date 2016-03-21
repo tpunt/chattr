@@ -30,7 +30,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.Host do
 
   def fetch_chat_room_hosts(user_id, chat_room_id) do
     user_query = from u in User,
-      where: u.id == ^user_id
+      where: u.id == ^user_id or u.user_id == ^user_id
 
     Repo.one! user_query
 
@@ -51,7 +51,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.Host do
     Repo.all from u in User,
       join: cr in ChatRoom, on: u.id == cr.user_id,
       join: h in Host, on: cr.id == h.chat_room_id,
-      where: u.id == ^user_id and cr.id == ^chat_room_id,
+      where: (u.id == ^user_id or u.user_id == ^user_id) and cr.id == ^chat_room_id,
       select: h
 
       # SELECT h2."id", h2."uri", h2."bg_colour", h2."text_colour", h2."chat_room_id", h2."inserted_at", h2."updated_at" FROM "users" AS u0 INNER JOIN "chat_rooms" AS c1 ON u0."id" = c1."user_id" INNER JOIN "hosts" AS h2 ON c1."id" = h2."chat_room_id" WHERE (((u0."id" = 1) AND (c1."id" = 30)) AND (h2."id" = 4))
@@ -62,7 +62,7 @@ defmodule Chattr.Api.V1.User.ChatRoom.Host do
     Repo.one! from u in User,
       join: cr in ChatRoom, on: u.id == cr.user_id,
       join: h in Host, on: cr.id == h.chat_room_id,
-      where: u.id == ^user_id and cr.id == ^chat_room_id and h.id == ^host_id,
+      where: (u.id == ^user_id or u.user_id == ^user_id) and cr.id == ^chat_room_id and h.id == ^host_id,
       select: h
   end
 end
