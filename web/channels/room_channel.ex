@@ -19,7 +19,7 @@ defmodule Chattr.RoomChannel do
   def handle_info({:after_join, body}, socket) do
     user = Repo.get!(User, body["user_id"]) # should be oauth token?
 
-    data = %{user: %{id: user.id, username: user.username}}
+    data = %{user: %{id: user.id, name: user.name}}
 
     broadcast! socket, "user:joined", data
     push socket, "phx_join", %{status: "connected"}
