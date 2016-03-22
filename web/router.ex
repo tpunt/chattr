@@ -9,8 +9,8 @@ defmodule Chattr.Router do
     pipe_through :api
 
     scope "/v1", V1 do
-      resources "/users/:user_id/chat_rooms/:chat_room_id/hosts", User.ChatRoom.HostController, except: [:new, :edit]
-      resources "/users/:user_id/chat_rooms", User.ChatRoomController, except: [:new, :edit]
+      resources "/chat_rooms/:chat_room_id/hosts", ChatRoom.HostController, except: [:new, :edit]
+      resources "/chat_rooms", ChatRoomController, except: [:new, :edit]
       resources "/users", UserController, except: [:new, :edit]
       resources "/messages", MessageController, except: [:new, :edit]
     #   scope "/users/:user_id", User do

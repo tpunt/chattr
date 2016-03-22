@@ -1,14 +1,18 @@
-defmodule Chattr.Api.V1.User.ChatRoomController do
+defmodule Chattr.Api.V1.ChatRoomController do
   use Chattr.Web, :controller
 
-  alias Chattr.Api.V1.User.ChatRoom
-  alias Chattr.Api.V1.User.ChatRoom.Host
+  alias Chattr.Api.V1.ChatRoom
+  alias Chattr.Api.V1.ChatRoom.Host
 
   plug :scrub_params, "chat_room" when action in [:create, :update]
 
   def index(conn, %{"user_id" => user_id}) do
     chat_rooms = ChatRoom.fetch_user_chat_rooms(user_id)
     render(conn, "index.json", chat_rooms: chat_rooms)
+  end
+
+  def index(conn, _params) do
+    render(conn, "index.json", chat_rooms: ChatRoom.fetch_chat_rooms)
   end
 
   def create(conn, %{"chat_room" => chat_room_params, "user_id" => user_id, "hosts" => hosts}) do
@@ -63,13 +67,20 @@ defmodule Chattr.Api.V1.User.ChatRoomController do
     render(conn, "show.json", chat_room: chat_room)
   end
 
-  def update(conn, %{"user_id" => user_id, "id" => id, "chat_room" => chat_room_params}) do
+  def show(conn, %{"id" => chat_room_id}) do
+    chat_room = ChatRoom.fetch_chat_room(chat_room_id)
+
+    render(conn, "show.json", chat_room: chat_room)
+  end
+
+  def update(conn, %{"id" => id, "chat_room" => chat_room_params}) do
     chat_room = Repo.get!(ChatRoom, id)
-    changeset = ChatRoom.changeset(chat_room, Map.put(chat_room_params, "user_id", user_id))
+    # changeset = ChatRoom.changeset(chat_room, Map.put(chat_room_params, "user_id", user_id))
+    changeset = ChatRoom.changeset(chat_room, chat_room_params)
 
     case Repo.update(changeset) do
       {:ok, chat_room} ->
-        chat_room = ChatRoom.fetch_user_chat_room(user_id, chat_room.id)
+        chat_room = ChatRoom.fetch_chat_room(chat_room.id)
         render(conn, "show.json", chat_room: chat_room)
       {:error, changeset} ->
         conn

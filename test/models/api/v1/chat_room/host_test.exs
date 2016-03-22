@@ -1,7 +1,7 @@
-defmodule Chattr.Api.V1.User.ChatRoom.HostTest do
+defmodule Chattr.Api.V1.ChatRoom.HostTest do
   use Chattr.ModelCase
 
-  alias Chattr.Api.V1.User.ChatRoom.Host
+  alias Chattr.Api.V1.ChatRoom.Host
 
   @valid_attrs %{bg_colour: "some content", text_colour: "some content", uri: "some content"}
   @invalid_attrs %{}

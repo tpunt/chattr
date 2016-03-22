@@ -1,7 +1,7 @@
-defmodule Chattr.Api.V1.User.ChatRoomTest do
+defmodule Chattr.Api.V1.ChatRoomTest do
   use Chattr.ModelCase
 
-  alias Chattr.Api.V1.User.ChatRoom
+  alias Chattr.Api.V1.ChatRoom
 
   @valid_attrs %{name: "some content"}
   @invalid_attrs %{}

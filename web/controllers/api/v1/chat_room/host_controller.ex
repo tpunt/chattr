@@ -1,12 +1,12 @@
-defmodule Chattr.Api.V1.User.ChatRoom.HostController do
+defmodule Chattr.Api.V1.ChatRoom.HostController do
   use Chattr.Web, :controller
 
-  alias Chattr.Api.V1.User.ChatRoom.Host
+  alias Chattr.Api.V1.ChatRoom.Host
 
   plug :scrub_params, "host" when action in [:create, :update]
 
-  def index(conn, %{"user_id" => user_id, "chat_room_id" => chat_room_id}) do
-    hosts = Host.fetch_chat_room_hosts(user_id, chat_room_id)
+  def index(conn, %{"chat_room_id" => chat_room_id}) do
+    hosts = Host.fetch_chat_room_hosts(chat_room_id)
     render(conn, "index.json", hosts: hosts)
   end
 
@@ -26,8 +26,8 @@ defmodule Chattr.Api.V1.User.ChatRoom.HostController do
     end
   end
 
-  def show(conn, %{"user_id" => user_id, "chat_room_id" => chat_room_id, "id" => host_id}) do
-    host = Host.fetch_chat_room_host(user_id, chat_room_id, host_id)
+  def show(conn, %{"chat_room_id" => chat_room_id, "id" => host_id}) do
+    host = Host.fetch_chat_room_host(chat_room_id, host_id)
     render(conn, "show.json", host: host)
   end
 
