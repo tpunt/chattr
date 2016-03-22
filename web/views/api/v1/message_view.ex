@@ -15,9 +15,13 @@ defmodule Chattr.Api.V1.MessageView do
     %{id: message.id,
       message: message.message,
       chat_room_id: message.chat_room_id,
-      user_id: message.user_id,
       longitude: message.longitude,
       latitude: message.latitude,
-      location: message.location}
+      location: message.location,
+      user: %{
+        id: message.user.user_id,
+        name: message.user.name,
+        email: message.user.email
+      }}
   end
 end

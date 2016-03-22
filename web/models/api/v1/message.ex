@@ -10,8 +10,8 @@ defmodule Chattr.Api.V1.Message do
     field :longitude, :decimal
     field :latitude, :decimal
     field :location, :string
-    belongs_to :chat_room, Chattr.Chatroom
-    belongs_to :user, Chattr.User
+    belongs_to :chat_room, Chatroom
+    belongs_to :user, User
 
     timestamps
   end
@@ -26,16 +26,20 @@ defmodule Chattr.Api.V1.Message do
 
   def fetch_chat_room_messages(chat_room_id) do
     Repo.all from m in Message,
+      join: u in assoc(m, :user),
       where: m.chat_room_id == ^chat_room_id,
+      preload: [user: u],
       select: m
   end
 
+  # broken in view
   def fetch_user_messages(user_id) do
     Repo.all from m in Message,
       where: m.user_id == ^user_id,
       select: m
   end
 
+  # broken in view
   def fetch_user_chat_room_messages(user_id, chat_room_id) do
     Repo.all from m in Message,
       where: m.user_id == ^user_id and m.chat_room_id == ^chat_room_id,
@@ -44,7 +48,9 @@ defmodule Chattr.Api.V1.Message do
 
   def fetch_message(message_id) do
     Repo.one! from m in Message,
+      join: u in assoc(m, :user),
       where: m.id == ^message_id,
+      preload: [user: u],
       select: m
   end
 end
