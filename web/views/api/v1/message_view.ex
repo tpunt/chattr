@@ -19,7 +19,7 @@ defmodule Chattr.Api.V1.MessageView do
       latitude: message.latitude,
       location: message.location,
       user: %{
-        id: message.user.user_id,
+        id: message.user.id,
         name: message.user.name,
         email: message.user.email
       }}
